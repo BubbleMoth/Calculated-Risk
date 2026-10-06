@@ -1,4 +1,3 @@
-// Dice math for Odds On. No Foundry calls here, so this can run in Node too.
 // Each distribution is { min, p }: p[i] is the chance of rolling min + i.
 
 export const MODES = Object.freeze({
@@ -149,7 +148,7 @@ function applyReroll(dist, match) {
     };
   }
 
-  // Keep the second roll, even if it matches the reroll condition again.
+  // Keep the second roll.
   return {
     min: dist.min,
     p: dist.p.map((prob, i) => {
