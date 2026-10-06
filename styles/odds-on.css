@@ -1,0 +1,99 @@
+:root,
+.theme-light {
+  --odds-on-likely: #2e7d32;
+  --odds-on-risky: #9a5b00;
+  --odds-on-longshot: #b3261e;
+}
+
+.theme-dark {
+  --odds-on-likely: #81c784;
+  --odds-on-risky: #f2b84b;
+  --odds-on-longshot: #f28b82;
+}
+
+.odds-on {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 2px 0 6px;
+  padding-top: 8px;
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.odds-on .odds-on-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.odds-on .odds-on-label {
+  flex: 1;
+  margin: 0;
+}
+
+.odds-on input.odds-on-target {
+  flex: 0 0 4.5rem;
+  width: 4.5rem;
+  text-align: center;
+}
+
+.odds-on .odds-on-token,
+.odds-on .odds-on-manual {
+  display: none;
+}
+
+.odds-on.token-mode input.odds-on-target {
+  display: none;
+}
+
+.odds-on.token-mode .odds-on-token {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.odds-on .odds-on-token-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.odds-on.token-mode .odds-on-manual {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 28px;
+  padding: 0 6px;
+}
+
+.odds-on .odds-on-hint {
+  margin: 0;
+  font-size: var(--font-size-12, 12px);
+  color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+.odds-on .odds-on-hint:empty {
+  display: none;
+}
+
+.dialog-buttons button.odds-on-has-chip {
+  flex-direction: column;
+  height: auto;
+  min-height: var(--button-size, 28px);
+  gap: 0;
+  padding-block: 4px;
+  line-height: 1.25;
+}
+
+.odds-on-chip {
+  display: block;
+  font-size: var(--font-size-11, 11px);
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.odds-on-chip.likely { color: var(--odds-on-likely); }
+.odds-on-chip.risky { color: var(--odds-on-risky); }
+.odds-on-chip.longshot { color: var(--odds-on-longshot); }

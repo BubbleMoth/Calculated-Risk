@@ -1,0 +1,60 @@
+{
+  "ODDSON": {
+    "TargetAC": "Target AC",
+    "TargetDC": "Target DC",
+    "TokenWithAC": "{name} (AC {ac})",
+    "EnterManually": "Enter a number instead",
+    "Hint": {
+      "Empty": "Enter a target number to see your odds.",
+      "Unsupported": "Odds aren't available for this roll's formula.",
+      "Hidden": "Your target's AC stays hidden.",
+      "FirstTarget": "Showing odds against {name}, the first of {count} targets."
+    },
+    "Bracket": {
+      "likely": "Likely",
+      "risky": "Risky",
+      "longshot": "Long shot"
+    },
+    "Settings": {
+      "playerDisplay": {
+        "Name": "What players see",
+        "Hint": "How odds appear to players when they type in a target. The GM always sees exact odds.",
+        "Exact": "Exact percentage",
+        "Bracket": "Bracket only (Likely, Risky, Long shot)",
+        "Off": "Nothing"
+      },
+      "useTargets": {
+        "Name": "Fill in AC from targeted tokens",
+        "Hint": "When a player makes an attack with a token targeted, use that creature's AC automatically. Players can still type their own number."
+      },
+      "targetedDisplay": {
+        "Name": "What players see when the AC comes from a target",
+        "Hint": "Exact percentages let players work out a creature's AC. Brackets keep it vague."
+      },
+      "likelyThreshold": {
+        "Name": "Likely starts at (%)",
+        "Hint": "Odds at or above this percentage show as Likely."
+      },
+      "riskyThreshold": {
+        "Name": "Risky starts at (%)",
+        "Hint": "Odds at or above this percentage, but below Likely, show as Risky. Anything lower is a Long shot."
+      },
+      "labelLikely": {
+        "Name": "Label for Likely",
+        "Hint": "Rename this bracket to suit your table. Leave blank to use \"Likely\"."
+      },
+      "labelRisky": {
+        "Name": "Label for Risky",
+        "Hint": "Leave blank to use \"Risky\"."
+      },
+      "labelLongshot": {
+        "Name": "Label for Long shot",
+        "Hint": "Leave blank to use \"Long shot\"."
+      },
+      "showOdds": {
+        "Name": "Show odds to me",
+        "Hint": "Turn this off to hide odds on your own screen. Only affects you."
+      }
+    }
+  }
+}

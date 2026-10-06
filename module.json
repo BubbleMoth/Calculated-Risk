@@ -1,0 +1,55 @@
+{
+  "id": "target-odds",
+  "title": "Target Odds",
+  "description": "Shows your chance of success right on D&D 5e roll dialogs. Type in a DC or AC, or let the GM allow targeted tokens to fill it in. GMs can show exact percentages or just Likely, Risky, and Long shot.",
+  "version": "0.1.0",
+  "type": "module",
+
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+
+  "authors": [
+    {
+      "name": "Bubblemoth"
+    }
+  ],
+
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "readme": "",
+  "bugs": "",
+  "changelog": "",
+  "license": "",
+
+  "esmodules": [
+    "scripts/odds-on.mjs"
+  ],
+
+  "styles": [
+    "styles/odds-on.css"
+  ],
+
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "6.0.5",
+          "verified": "6.0.5"
+        }
+      }
+    ]
+  }
+}
