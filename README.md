@@ -1,16 +1,17 @@
 # Calculated Risk
-
-Calculated Risk is a small Foundry VTT module for D&D 5e that shows your chance of success before you roll.
-
-Enter a DC or AC in the roll dialog and the Advantage, Normal, and Disadvantage buttons will show the odds for each option.
+<p>
+  <img src="assets/attack-roll-percent.png" alt="Calculated Risk showing exact percentages" height="500">
+  <img src="assets/attack-roll-vague.png" alt="Calculated Risk showing Likely, Risky, and Long shot" height="500">
+</p>
+Calculated Risk is a small Foundry VTT module for D&D 5e that shows the chance of success before you make a roll.
 
 ## Settings
 
 Settings are under **Configure Settings --> Calculated Risk**.
 
-You can choose whether players see exact percentages, simple labels like **Likely** or **Risky**, or nothing at all.
+the GM can choose whether players see exact percentages, simple labels like **Likely** or **Risky**, or nothing at all.
 
-Calculated Risk can also pull AC from a targeted token. By default, players only see a probability bracket when this is enabled so the AC is harder to work out.
+<img src="assets/settings.png" alt="Calculated Risk settings" width="700">
 
 ## Installation
 
