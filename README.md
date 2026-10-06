@@ -40,8 +40,8 @@ When a number is hidden, players see where it came from, like the creature's nam
    `https://github.com/BubbleMoth/Calculated-Risk/releases/latest/download/module.json`
 
 4. Click **Install**.
-5. Launch your world and go to **Game Settings → Manage Modules**.
-6. Enable **Effective Critical Hits**.
+5. Launch your world and go to **Game Settings -> Manage Modules**.
+6. Enable **Calculated Risk**.
 
 
 ### Manual
