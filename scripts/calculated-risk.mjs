@@ -5,8 +5,8 @@ const BUTTON_MODES = [MODES.ADVANTAGE, MODES.NORMAL, MODES.DISADVANTAGE];
 
 /**
  * Keep track of each dialog's target and where it came from.
- * @type {WeakMap<object, { source: "manual"|"roll"|"token", target: number|null, touched?: boolean,
- *   name?: string, count?: number }>}
+ * @type {WeakMap<object, { source: "manual"|"roll"|"token", target: number|null, hidden: boolean,
+ *   touched?: boolean, name?: string, count?: number }>}
  */
 const dialogState = new WeakMap();
 
@@ -32,6 +32,16 @@ Hooks.once("init", () => {
   });
 
   register("useTargets", { scope: "world", type: Boolean, default: false });
+  register("hideFilledValues", {
+    scope: "world",
+    type: String,
+    choices: {
+      match: "CALCULATEDRISK.Settings.hideFilledValues.Match",
+      always: "CALCULATEDRISK.Settings.hideFilledValues.Always",
+      never: "CALCULATEDRISK.Settings.hideFilledValues.Never"
+    },
+    default: "match"
+  });
   register("targetedDisplay", {
     scope: "world",
     type: String,
@@ -105,12 +115,53 @@ function findTargetedAC() {
   return null;
 }
 
+// Check whether D&D 5e is already showing this DC to the player.
+function systemShowsDC(app) {
+  const clicked = app.config?.event?.target;
+
+  // Inline roll links in journals and chat can be written with hideDC.
+  if (clicked?.closest?.("[data-hide-d-c]")) return false;
+
+  // Save and check buttons on item cards point back to the card they came from.
+  // Roll request cards swap between a label with the DC and one without.
+  let messageId = foundry.utils.getProperty(app.message ?? {}, "data.system.origin");
+  if (!messageId && clicked?.closest?.("button")?.querySelector(".visible-dc")) {
+    messageId = clicked.closest("[data-message-id]")?.dataset.messageId;
+  }
+  const message = messageId ? game.messages.get(messageId) : null;
+  return message?.shouldDisplayChallenge ?? true;
+}
+
+// Check whether D&D 5e shows AC on attack rolls.
+function systemShowsAC() {
+  try {
+    return game.settings.get("dnd5e", "attackRollVisibility") === "all";
+  } catch {
+    return false;
+  }
+}
+
+// Decide whether a number filled in for the player should stay hidden.
+function isHiddenFromPlayer(app, source) {
+  if (game.user.isGM || (source === "manual")) return false;
+  const mode = setting("hideFilledValues");
+  if (mode === "always") return true;
+  if (mode === "never") return false;
+  return source === "token" ? !systemShowsAC() : !systemShowsDC(app);
+}
+
 function initialState(app) {
   const known = toNumber(app.rolls?.[0]?.options?.target);
-  if (known !== null) return { source: "roll", target: known };
+  if (known !== null) return { source: "roll", target: known, hidden: isHiddenFromPlayer(app, "roll") };
   const targeted = isAttack(app) ? findTargetedAC() : null;
-  if (targeted) return { source: "token", target: targeted.ac, name: targeted.name, count: targeted.count };
-  return { source: "manual", target: null, touched: false };
+  if (targeted) return {
+    source: "token",
+    target: targeted.ac,
+    name: targeted.name,
+    count: targeted.count,
+    hidden: isHiddenFromPlayer(app, "token")
+  };
+  return { source: "manual", target: null, touched: false, hidden: false };
 }
 
 // Show exact odds, a bracket label, or nothing, depending on the settings.
@@ -118,7 +169,7 @@ function displayMode(state) {
   if (game.user.isGM) return "exact";
   const playerDisplay = setting("playerDisplay");
   if (playerDisplay === "off") return "off";
-  if (state.source === "token") return setting("targetedDisplay");
+  if (state.hidden) return setting("targetedDisplay");
   return playerDisplay;
 }
 
@@ -162,9 +213,9 @@ function buildPanel(app) {
     <div class="calculated-risk-row">
       <label class="calculated-risk-label"></label>
       <input type="number" class="calculated-risk-target" inputmode="numeric" step="1" min="0" max="99" placeholder="—">
-      <span class="calculated-risk-token">
+      <span class="calculated-risk-source">
         <i class="fa-solid fa-crosshairs" inert></i>
-        <span class="calculated-risk-token-name"></span>
+        <span class="calculated-risk-source-name"></span>
       </span>
       <button type="button" class="calculated-risk-manual">
         <i class="fa-solid fa-pen" inert></i>
@@ -186,6 +237,7 @@ function buildPanel(app) {
     const state = dialogState.get(app);
     state.source = "manual";
     state.touched = true;
+    state.hidden = false;
     state.target = toNumber(input.value);
     refresh(app, app.element);
   });
@@ -199,10 +251,11 @@ function buildPanel(app) {
 
   manual.addEventListener("click", () => {
     const state = dialogState.get(app);
-    // Clear the field for players so switching to manual doesn't give away a hidden AC.
-    if (!game.user.isGM) state.target = null;
+    // Clear the field so switching to manual doesn't give away a hidden number.
+    if (state.hidden) state.target = null;
     state.source = "manual";
     state.touched = true;
+    state.hidden = false;
     refresh(app, app.element);
     app.element?.querySelector(".calculated-risk-target")?.focus();
   });
@@ -221,15 +274,22 @@ function refresh(app, root) {
   const input = panel.querySelector(".calculated-risk-target");
 
   panel.querySelector(".calculated-risk-label").textContent = game.i18n.localize(attack ? "CALCULATEDRISK.TargetAC" : "CALCULATEDRISK.TargetDC");
-  panel.classList.toggle("token-mode", tokenMode);
+
+  // Targets and hidden numbers show where the number came from instead of an editable field.
+  panel.classList.toggle("locked", tokenMode || state.hidden);
   if (document.activeElement !== input) {
-    input.value = (tokenMode && !game.user.isGM) ? "" : (state.target ?? "");
+    input.value = state.hidden ? "" : (state.target ?? "");
   }
 
   const name = state.name ?? "";
-  panel.querySelector(".calculated-risk-token-name").textContent = game.user.isGM
-    ? game.i18n.format("CALCULATEDRISK.TokenWithAC", { name, ac: state.target })
-    : name;
+  panel.querySelector(".calculated-risk-source > i").className = tokenMode
+    ? "fa-solid fa-crosshairs"
+    : "fa-solid fa-eye-slash";
+  let sourceText = game.i18n.localize("CALCULATEDRISK.Hidden");
+  if (tokenMode) sourceText = state.hidden
+    ? name
+    : game.i18n.format("CALCULATEDRISK.TokenWithAC", { name, ac: state.target });
+  panel.querySelector(".calculated-risk-source-name").textContent = sourceText;
 
   let odds = null;
   let unsupported = false;
@@ -248,7 +308,7 @@ function refresh(app, root) {
   if (unsupported) hint = game.i18n.localize("CALCULATEDRISK.Hint.Unsupported");
   else if (state.target === null) hint = game.i18n.localize("CALCULATEDRISK.Hint.Empty");
   else if (tokenMode && (state.count > 1)) hint = game.i18n.format("CALCULATEDRISK.Hint.FirstTarget", { name, count: state.count });
-  else if (tokenMode && !game.user.isGM) hint = game.i18n.localize("CALCULATEDRISK.Hint.Hidden");
+  else if (state.hidden) hint = game.i18n.localize(tokenMode ? "CALCULATEDRISK.Hint.Hidden" : "CALCULATEDRISK.Hint.HiddenDC");
   panel.querySelector(".calculated-risk-hint").textContent = hint;
 
   // Update the odds label on each roll button.
@@ -292,9 +352,17 @@ Hooks.on("targetToken", user => {
     if (!followsTargets) continue;
     const targeted = findTargetedAC();
     if (targeted) {
-      Object.assign(state, { source: "token", target: targeted.ac, name: targeted.name, count: targeted.count });
+      Object.assign(state, {
+        source: "token",
+        target: targeted.ac,
+        name: targeted.name,
+        count: targeted.count,
+        hidden: isHiddenFromPlayer(app, "token")
+      });
     } else if (state.source === "token") {
-      Object.assign(state, { source: "manual", target: null, touched: false, name: undefined, count: undefined });
+      Object.assign(state, {
+        source: "manual", target: null, touched: false, hidden: false, name: undefined, count: undefined
+      });
     }
     refresh(app, app.element);
   }
