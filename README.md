@@ -3,8 +3,8 @@
 Calculated Risk is a small Foundry VTT module for D&D 5e that shows your chance of success before you roll.
 
 <p>
-  <img src="assets/attack-roll-percent.png" alt="Calculated Risk showing exact percentages" height="500">
-  <img src="assets/attack-roll-vague.png" alt="Calculated Risk showing Likely, Risky, and Long shot" height="500">
+  <img src="assets/attack-roll-percent.png" alt="Calculated Risk showing exact percentages" width="47%">
+  <img src="assets/attack-roll-vague.png" alt="Calculated Risk showing Likely, Risky, and Long shot" width="47%">
 </p>
 
 ## Settings
@@ -26,7 +26,7 @@ Some numbers are filled in for the player, like a target's AC or the DC on a spe
 When a number is hidden, players see where it came from, like the creature's name, and odds show as a bracket by default so the number is harder to work out. Players can still type their own number instead. The GM always sees everything.
 
 <p>
-  <img src="assets/settings.png" alt="Calculated Risk settings" width="700">
+  <img src="assets/settings.png" alt="Calculated Risk settings" width="75%">
 </p>
 
 ## Installation
