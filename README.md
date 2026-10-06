@@ -1,17 +1,29 @@
 # Calculated Risk
+
+Calculated Risk is a small Foundry VTT module for D&D 5e that shows your chance of success before you roll.
+
 <p>
   <img src="assets/attack-roll-percent.png" alt="Calculated Risk showing exact percentages" height="500">
   <img src="assets/attack-roll-vague.png" alt="Calculated Risk showing Likely, Risky, and Long shot" height="500">
 </p>
-Calculated Risk is a small Foundry VTT module for D&D 5e that shows the chance of success before you make a roll.
 
 ## Settings
 
 Settings are under **Configure Settings --> Calculated Risk**.
 
-the GM can choose whether players see exact percentages, simple labels like **Likely** or **Risky**, or nothing at all.
+You can choose whether players see exact percentages, simple labels like **Likely** or **Risky**, or nothing at all.
 
-<img src="assets/settings.png" alt="Calculated Risk settings" width="700">
+Calculated Risk can also pull AC from a targeted token.
+
+### Hidden numbers
+
+Some numbers are filled in for the player, like a target's AC or the DC on a spell's save button. The **Hide filled-in numbers from players** setting decides whether players see them:
+
+- **Match D&D 5e's visibility settings** (default): a DC stays hidden whenever D&D 5e hides it on the chat card, and a target's AC stays hidden unless D&D 5e shows AC on attack rolls.
+- **Always hide:** players never see a filled-in number.
+- **Always show:** players always see it.
+
+When a number is hidden, players see where it came from, like the creature's name, and odds show as a bracket by default so the number is harder to work out. Players can still type their own number instead. The GM always sees everything.
 
 ## Installation
 
