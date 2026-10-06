@@ -1,6 +1,6 @@
 import { bracketFor, formatPercent, MODES, oddsForRoll, UnsupportedFormulaError } from "./odds.mjs";
 
-const MODULE_ID = "odds-on";
+const MODULE_ID = "calculated-risk";
 const BUTTON_MODES = [MODES.ADVANTAGE, MODES.NORMAL, MODES.DISADVANTAGE];
 
 /**
@@ -14,8 +14,8 @@ const dialogState = new WeakMap();
 
 Hooks.once("init", () => {
   const register = (key, data) => game.settings.register(MODULE_ID, key, {
-    name: `ODDSON.Settings.${key}.Name`,
-    hint: `ODDSON.Settings.${key}.Hint`,
+    name: `CALCULATEDRISK.Settings.${key}.Name`,
+    hint: `CALCULATEDRISK.Settings.${key}.Hint`,
     config: true,
     ...data
   });
@@ -24,9 +24,9 @@ Hooks.once("init", () => {
     scope: "world",
     type: String,
     choices: {
-      exact: "ODDSON.Settings.playerDisplay.Exact",
-      bracket: "ODDSON.Settings.playerDisplay.Bracket",
-      off: "ODDSON.Settings.playerDisplay.Off"
+      exact: "CALCULATEDRISK.Settings.playerDisplay.Exact",
+      bracket: "CALCULATEDRISK.Settings.playerDisplay.Bracket",
+      off: "CALCULATEDRISK.Settings.playerDisplay.Off"
     },
     default: "exact"
   });
@@ -36,8 +36,8 @@ Hooks.once("init", () => {
     scope: "world",
     type: String,
     choices: {
-      bracket: "ODDSON.Settings.playerDisplay.Bracket",
-      exact: "ODDSON.Settings.playerDisplay.Exact"
+      bracket: "CALCULATEDRISK.Settings.playerDisplay.Bracket",
+      exact: "CALCULATEDRISK.Settings.playerDisplay.Exact"
     },
     default: "bracket"
   });
@@ -128,7 +128,7 @@ function bracketLabel(bracket) {
     risky: setting("labelRisky"),
     longshot: setting("labelLongshot")
   }[bracket]?.trim();
-  return custom || game.i18n.localize(`ODDSON.Bracket.${bracket}`);
+  return custom || game.i18n.localize(`CALCULATEDRISK.Bracket.${bracket}`);
 }
 
 // Roll dialog
@@ -148,7 +148,7 @@ Hooks.on("renderD20RollConfigurationDialog", (app, element) => {
 
     const buttons = root.querySelector('[data-application-part="buttons"]') ?? root.querySelector(".dialog-buttons");
     if (!buttons) return;
-    if (!root.querySelector(".odds-on")) buttons.before(buildPanel(app));
+    if (!root.querySelector(".calculated-risk")) buttons.before(buildPanel(app));
     refresh(app, root);
   } catch (err) {
     console.error(`${MODULE_ID} | Couldn't add odds to the roll dialog.`, err);
@@ -157,28 +157,28 @@ Hooks.on("renderD20RollConfigurationDialog", (app, element) => {
 
 function buildPanel(app) {
   const panel = document.createElement("section");
-  panel.className = "odds-on";
+  panel.className = "calculated-risk";
   panel.innerHTML = `
-    <div class="odds-on-row">
-      <label class="odds-on-label"></label>
-      <input type="number" class="odds-on-target" inputmode="numeric" step="1" min="0" max="99" placeholder="—">
-      <span class="odds-on-token">
+    <div class="calculated-risk-row">
+      <label class="calculated-risk-label"></label>
+      <input type="number" class="calculated-risk-target" inputmode="numeric" step="1" min="0" max="99" placeholder="—">
+      <span class="calculated-risk-token">
         <i class="fa-solid fa-crosshairs" inert></i>
-        <span class="odds-on-token-name"></span>
+        <span class="calculated-risk-token-name"></span>
       </span>
-      <button type="button" class="odds-on-manual">
+      <button type="button" class="calculated-risk-manual">
         <i class="fa-solid fa-pen" inert></i>
       </button>
     </div>
-    <p class="odds-on-hint" aria-live="polite"></p>`;
+    <p class="calculated-risk-hint" aria-live="polite"></p>`;
 
-  const inputId = `odds-on-target-${foundry.utils.randomID()}`;
-  const input = panel.querySelector(".odds-on-target");
+  const inputId = `calculated-risk-target-${foundry.utils.randomID()}`;
+  const input = panel.querySelector(".calculated-risk-target");
   input.id = inputId;
-  panel.querySelector(".odds-on-label").htmlFor = inputId;
+  panel.querySelector(".calculated-risk-label").htmlFor = inputId;
 
-  const manual = panel.querySelector(".odds-on-manual");
-  const manualLabel = game.i18n.localize("ODDSON.EnterManually");
+  const manual = panel.querySelector(".calculated-risk-manual");
+  const manualLabel = game.i18n.localize("CALCULATEDRISK.EnterManually");
   manual.dataset.tooltip = manualLabel;
   manual.setAttribute("aria-label", manualLabel);
 
@@ -204,7 +204,7 @@ function buildPanel(app) {
     state.source = "manual";
     state.touched = true;
     refresh(app, app.element);
-    app.element?.querySelector(".odds-on-target")?.focus();
+    app.element?.querySelector(".calculated-risk-target")?.focus();
   });
 
   return panel;
@@ -212,23 +212,23 @@ function buildPanel(app) {
 
 function refresh(app, root) {
   const state = dialogState.get(app);
-  const panel = root?.querySelector(".odds-on");
+  const panel = root?.querySelector(".calculated-risk");
   if (!state || !panel) return;
 
   const attack = isAttack(app);
   const mode = displayMode(state);
   const tokenMode = state.source === "token";
-  const input = panel.querySelector(".odds-on-target");
+  const input = panel.querySelector(".calculated-risk-target");
 
-  panel.querySelector(".odds-on-label").textContent = game.i18n.localize(attack ? "ODDSON.TargetAC" : "ODDSON.TargetDC");
+  panel.querySelector(".calculated-risk-label").textContent = game.i18n.localize(attack ? "CALCULATEDRISK.TargetAC" : "CALCULATEDRISK.TargetDC");
   panel.classList.toggle("token-mode", tokenMode);
   if (document.activeElement !== input) {
     input.value = (tokenMode && !game.user.isGM) ? "" : (state.target ?? "");
   }
 
   const name = state.name ?? "";
-  panel.querySelector(".odds-on-token-name").textContent = game.user.isGM
-    ? game.i18n.format("ODDSON.TokenWithAC", { name, ac: state.target })
+  panel.querySelector(".calculated-risk-token-name").textContent = game.user.isGM
+    ? game.i18n.format("CALCULATEDRISK.TokenWithAC", { name, ac: state.target })
     : name;
 
   let odds = null;
@@ -245,11 +245,11 @@ function refresh(app, root) {
 
   // Explain missing odds or where the target came from.
   let hint = "";
-  if (unsupported) hint = game.i18n.localize("ODDSON.Hint.Unsupported");
-  else if (state.target === null) hint = game.i18n.localize("ODDSON.Hint.Empty");
-  else if (tokenMode && (state.count > 1)) hint = game.i18n.format("ODDSON.Hint.FirstTarget", { name, count: state.count });
-  else if (tokenMode && !game.user.isGM) hint = game.i18n.localize("ODDSON.Hint.Hidden");
-  panel.querySelector(".odds-on-hint").textContent = hint;
+  if (unsupported) hint = game.i18n.localize("CALCULATEDRISK.Hint.Unsupported");
+  else if (state.target === null) hint = game.i18n.localize("CALCULATEDRISK.Hint.Empty");
+  else if (tokenMode && (state.count > 1)) hint = game.i18n.format("CALCULATEDRISK.Hint.FirstTarget", { name, count: state.count });
+  else if (tokenMode && !game.user.isGM) hint = game.i18n.localize("CALCULATEDRISK.Hint.Hidden");
+  panel.querySelector(".calculated-risk-hint").textContent = hint;
 
   // Update the odds label on each roll button.
   const likelyAt = setting("likelyThreshold");
@@ -257,10 +257,10 @@ function refresh(app, root) {
   for (const buttonMode of BUTTON_MODES) {
     const button = root.querySelector(`button[data-action="${buttonMode}"]`);
     if (!button) continue;
-    let chip = button.querySelector(".odds-on-chip");
+    let chip = button.querySelector(".calculated-risk-chip");
     if (!odds) {
       chip?.remove();
-      button.classList.remove("odds-on-has-chip");
+      button.classList.remove("calculated-risk-has-chip");
       continue;
     }
     if (!chip) {
@@ -269,7 +269,7 @@ function refresh(app, root) {
     }
     const probability = odds[buttonMode];
     const bracket = bracketFor(probability, likelyAt, riskyAt);
-    chip.className = `odds-on-chip ${bracket}`;
+    chip.className = `calculated-risk-chip ${bracket}`;
     if (mode === "exact") {
       chip.textContent = formatPercent(probability);
       chip.dataset.tooltip = bracketLabel(bracket);
@@ -277,7 +277,7 @@ function refresh(app, root) {
       chip.textContent = bracketLabel(bracket);
       delete chip.dataset.tooltip;
     }
-    button.classList.add("odds-on-has-chip");
+    button.classList.add("calculated-risk-has-chip");
   }
 }
 

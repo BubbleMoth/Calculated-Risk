@@ -1,14 +1,14 @@
 {
-  "ODDSON": {
+  "CALCULATEDRISK": {
     "TargetAC": "Target AC",
     "TargetDC": "Target DC",
     "TokenWithAC": "{name} (AC {ac})",
     "EnterManually": "Enter a number instead",
     "Hint": {
-      "Empty": "Enter a target number to see your odds.",
+      "Empty": "Enter a target value to see your odds.",
       "Unsupported": "Odds aren't available for this roll's formula.",
-      "Hidden": "Your target's AC stays hidden.",
-      "FirstTarget": "Showing odds against {name}, the first of {count} targets."
+      "Hidden": "Target's AC stays hidden.",
+      "FirstTarget": "Odds against {name}, the first of {count} targets."
     },
     "Bracket": {
       "likely": "Likely",
