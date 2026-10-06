@@ -3,12 +3,14 @@
     "TargetAC": "Target AC",
     "TargetDC": "Target DC",
     "TokenWithAC": "{name} (AC {ac})",
+    "Hidden": "Hidden",
     "EnterManually": "Enter a number instead",
     "Hint": {
       "Empty": "Enter a target value to see your odds.",
       "Unsupported": "Odds aren't available for this roll's formula.",
       "Hidden": "Target's AC stays hidden.",
-      "FirstTarget": "Odds against {name}, the first of {count} targets."
+      "FirstTarget": "Odds against {name}, the first of {count} targets.",
+      "HiddenDC": "The DC stays hidden."
     },
     "Bracket": {
       "likely": "Likely",
@@ -27,9 +29,16 @@
         "Name": "Fill in AC from targeted tokens",
         "Hint": "When a player makes an attack with a token targeted, use that creature's AC automatically. Players can still type their own number."
       },
+      "hideFilledValues": {
+        "Name": "Hide filled-in numbers from players",
+        "Hint": "Applies to a target's AC and to DCs that come with a roll, like the DC on a spell's save button. Players see where the number came from but not the number itself. Matching D&D 5e hides a DC whenever its chat card hides it, and hides AC unless D&D 5e shows AC on attack rolls.",
+        "Match": "Match D&D 5e's visibility settings",
+        "Always": "Always hide",
+        "Never": "Always show"
+      },
       "targetedDisplay": {
-        "Name": "What players see when the AC comes from a target",
-        "Hint": "Exact percentages let players work out a creature's AC. Brackets keep it vague."
+        "Name": "What players see when a number is hidden",
+        "Hint": "Exact percentages let players work out a hidden AC or DC. Brackets keep it vague."
       },
       "likelyThreshold": {
         "Name": "Likely starts at (%)",
