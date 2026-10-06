@@ -10,7 +10,7 @@ Settings are under **Configure Settings --> Target Odds**.
 
 You can choose whether players see exact percentages, simple labels like **Likely** or **Risky**, or nothing at all.
 
-Odds On can also pull AC from a targeted token. By default, players only see a probability bracket when this is enabled so the AC is harder to work out.
+Target Odds can also pull AC from a targeted token. By default, players only see a probability bracket when this is enabled so the AC is harder to work out.
 
 ## Installation
 
@@ -28,7 +28,7 @@ Odds On can also pull AC from a targeted token. By default, players only see a p
 
 
 ### Manual
-Copy the `odds-on` folder into your Foundry `Data/modules` folder, restart Foundry, and enable **Odds On** under **Manage Modules**.
+Copy the `target-odds` folder into your Foundry `Data/modules` folder, restart Foundry, and enable **Target Odds** under **Manage Modules**.
 
 
 ## Compatibility
@@ -41,4 +41,4 @@ Copy the `odds-on` folder into your Foundry `Data/modules` folder, restart Found
 
 Odds are calculated from the roll formula.
 
-Some unusual formulas are not supported. If Odds On cannot calculate a roll accurately, it will show the odds as unavailable instead of guessing.
+Some unusual formulas are not supported. If Target Odds cannot calculate a roll accurately, it will show the odds as unavailable instead of guessing.
