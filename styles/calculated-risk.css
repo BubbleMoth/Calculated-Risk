@@ -38,29 +38,29 @@
   text-align: center;
 }
 
-.calculated-risk .calculated-risk-token,
+.calculated-risk .calculated-risk-source,
 .calculated-risk .calculated-risk-manual {
   display: none;
 }
 
-.calculated-risk.token-mode input.calculated-risk-target {
+.calculated-risk.locked input.calculated-risk-target {
   display: none;
 }
 
-.calculated-risk.token-mode .calculated-risk-token {
+.calculated-risk.locked .calculated-risk-source {
   display: flex;
   align-items: center;
   gap: 6px;
   min-width: 0;
 }
 
-.calculated-risk .calculated-risk-token-name {
+.calculated-risk .calculated-risk-source-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.calculated-risk.token-mode .calculated-risk-manual {
+.calculated-risk.locked .calculated-risk-manual {
   display: inline-flex;
   flex: 0 0 auto;
   width: auto;
