@@ -25,6 +25,10 @@ Some numbers are filled in for the player, like a target's AC or the DC on a spe
 
 When a number is hidden, players see where it came from, like the creature's name, and odds show as a bracket by default so the number is harder to work out. Players can still type their own number instead. The GM always sees everything.
 
+<p>
+  <img src="assets/settings.png" alt="Calculated Risk settings" width="700">
+</p>
+
 ## Installation
 
 ### Manifest URL
